@@ -51,7 +51,14 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        bucket= self._hash_mod(key)
+        node= LinkedPair(key,value)
+        node.next=self.storage[bucket]#first element till now is becoming second
+        self.storage[bucket]=node
+
+
+
+
 
 
 
@@ -63,7 +70,30 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        bucket=self._hash_mod(key)
+        if self.storage[bucket] is None:
+            return
+
+        #If key is in head itsel, make new head as current heads' next
+        # and we are done.
+        head= self.storage[bucket]
+        if head.key ==key:
+            self.storage[bucket] = head.next
+            return
+
+        #We are here if head is there and this is not the node we
+        # are looking to delete. Search for node we are looking to delete
+        current = head.next
+        prev = head
+        while current:
+            if current.key == key:
+                prev.next = current.next
+                return
+
+            prev = current
+            current = current.next
+
+
 
 
     def retrieve(self, key):
@@ -74,8 +104,14 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        bucket=self._hash_mod(key)
+        head= self.storage[bucket]
 
+        while head:
+            if head.key==key:
+                return head.value
+            head=head.next
+        return None
 
     def resize(self):
         '''
@@ -84,7 +120,8 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        for i in range(0,self.capacity):
+            self.storage.append(None)
 
 
 
